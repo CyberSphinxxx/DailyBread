@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Share2, BookOpen, Check } from 'lucide-react';
+import { Share2, BookOpen, Check, Volume2, Square } from 'lucide-react';
+import { useTextToSpeech } from '../hooks/useTextToSpeech';
 
 export function Controls({ verse }) {
     const [copied, setCopied] = useState(false);
+    const { speak, cancel, isSpeaking, hasSupport } = useTextToSpeech();
 
     const handleShare = async () => {
         const text = `"${verse.text}"\n- ${verse.reference} (${verse.version})`;
         const shareData = {
             title: 'Daily Bread Verse',
             text: text,
-            url: window.location.href, // Optional, context dependent
+            url: window.location.href,
         };
 
         try {
@@ -30,11 +32,41 @@ export function Controls({ verse }) {
         }
     };
 
+    const handleListen = () => {
+        if (isSpeaking) {
+            cancel();
+        } else {
+            const textToRead = `${verse.text}. ${verse.reference}`;
+            speak(textToRead);
+        }
+    };
+
     const encodedReference = encodeURIComponent(verse.reference);
     const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReference}&version=${verse.version}`;
 
     return (
         <div className="flex gap-4 justify-center mt-8">
+            {/* LISTEN BUTTON */}
+            {hasSupport && (
+                <button
+                    onClick={handleListen}
+                    className={`group p-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md border flex items-center justify-center
+            ${isSpeaking
+                            ? 'bg-indigo-50 text-indigo-600 border-indigo-100 hover:bg-indigo-100'
+                            : 'bg-stone-50 hover:bg-white text-stone-400 hover:text-indigo-600 border-stone-100 hover:scale-110 active:scale-95'
+                        }`}
+                    title={isSpeaking ? "Stop" : "Listen"}
+                    aria-label={isSpeaking ? "Stop reading" : "Read verse aloud"}
+                >
+                    {isSpeaking ? (
+                        <Square className="w-6 h-6 fill-current animate-pulse" />
+                    ) : (
+                        <Volume2 className="w-6 h-6" />
+                    )}
+                </button>
+            )}
+
+            {/* SHARE BUTTON */}
             <button
                 onClick={handleShare}
                 className="group relative p-3 rounded-full bg-stone-50 hover:bg-white text-stone-400 hover:text-indigo-600 transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md border border-stone-100"
@@ -53,6 +85,7 @@ export function Controls({ verse }) {
                 </span>
             </button>
 
+            {/* CONTEXT BUTTON */}
             <a
                 href={bibleGatewayUrl}
                 target="_blank"
