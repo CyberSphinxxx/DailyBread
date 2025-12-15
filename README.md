@@ -4,6 +4,8 @@
 
 **Daily Bread** is a serene, premium digital devotional designed to provide a single moment of reflection each day. Unlike typical Bible apps with endless scrolling, Daily Bread strictly offers **one verse per day**, encouraging deep meditation rather than consumption.
 
+<img width="1836" height="949" alt="image" src="https://github.com/user-attachments/assets/46104649-4b02-4a01-b9cd-51ff52e31c2e" />
+
 ---
 
 ## 📖 For The Reader (Non-Programmers)
