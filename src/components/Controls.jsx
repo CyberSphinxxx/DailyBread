@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Share2, BookOpen, Volume2, Square, Heart, Download, Copy, X } from 'lucide-react';
-import { useTextToSpeech } from '../hooks/useTextToSpeech';
+
+
 
 // Toast Component
 function Toast({ message, visible }) {
@@ -17,17 +18,12 @@ function Toast({ message, visible }) {
     );
 }
 
-export function Controls({ verse, isFavorite, onToggleFavorite, onDownloadImage }) {
+export function Controls({ verse, isFavorite, onToggleFavorite, onDownloadImage, playVerse, isPlaying, isLoading }) {
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [showToast, setShowToast] = useState(false);
-    const { speak, stop, isSpeaking, hasSupport } = useTextToSpeech();
 
     const handleListen = () => {
-        if (isSpeaking) {
-            stop();
-        } else {
-            speak(`${verse.text} - ${verse.reference}`);
-        }
+        playVerse(verse.text, verse.reference);
     };
 
     // Native Share or Copy fallback
@@ -92,21 +88,26 @@ export function Controls({ verse, isFavorite, onToggleFavorite, onDownloadImage 
                 <div className="w-px h-4 bg-stone-300 dark:bg-stone-700"></div>
 
                 {/* LISTEN BUTTON */}
-                {hasSupport && (
-                    <button
-                        onClick={handleListen}
-                        className={`group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95
-              ${isSpeaking ? 'text-indigo-600 dark:text-indigo-400' : 'text-stone-400 dark:text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
-                        title={isSpeaking ? "Stop" : "Listen"}
-                        aria-label={isSpeaking ? "Stop reading" : "Read verse aloud"}
-                    >
-                        {isSpeaking ? (
-                            <Square className="w-6 h-6 fill-current animate-pulse" />
-                        ) : (
-                            <Volume2 className="w-6 h-6" />
-                        )}
-                    </button>
-                )}
+                <button
+                    onClick={handleListen}
+                    disabled={isLoading}
+                    className={`group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95
+              ${isPlaying ? 'text-indigo-600 dark:text-indigo-400' : 'text-stone-400 dark:text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400'}
+              ${isLoading ? 'cursor-wait opacity-80' : ''}`}
+                    title={isPlaying ? "Stop" : "Listen"}
+                    aria-label={isPlaying ? "Stop reading" : "Read verse aloud"}
+                >
+                    {isLoading ? (
+                        <svg className="animate-spin h-6 w-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    ) : isPlaying ? (
+                        <Square className="w-6 h-6 fill-current animate-pulse" />
+                    ) : (
+                        <Volume2 className="w-6 h-6" />
+                    )}
+                </button>
 
                 {/* SHARE BUTTON */}
                 <div className="relative">
