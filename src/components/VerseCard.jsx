@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useState } from 'react';
 import { toPng } from 'html-to-image';
 import { ChevronDown, WifiOff } from 'lucide-react';
 import { Controls } from './Controls';
+import { useAudioPlayer } from '../hooks/useAudioPlayer';
 
 export function VerseCard({
     verse,
@@ -15,11 +16,23 @@ export function VerseCard({
     isFontTransitioning = false
 }) {
     const cardRef = useRef(null);
+    const { playVerse, isPlaying, isLoading } = useAudioPlayer();
 
     const handleDownloadImage = useCallback(async () => {
         if (!cardRef.current) return;
 
         try {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+
+            // Theme Variables
+            const theme = {
+                bg: isDarkMode ? '#0c0a09' : '#FDFBF7', // Stone-950 vs Warm White
+                text: isDarkMode ? '#d6d3d1' : '#1c1917', // Stone-300 vs Stone-900
+                gradient: isDarkMode
+                    ? 'radial-gradient(circle at center, #1c1917, #0c0a09)' // Dark Radial
+                    : 'radial-gradient(circle at center, #FDFBF7, #F5F5F4)' // Light Radial
+            };
+
             // Filter out the controls
             const filter = (node) => {
                 const exclusionClasses = ['controls-container'];
@@ -30,7 +43,7 @@ export function VerseCard({
                 filter: filter,
                 pixelRatio: 2, // Higher quality
                 width: 1200, // Force a consistent standard width
-                backgroundColor: '#FDFBF7', // Force solid warm background to prevent transparency
+                backgroundColor: theme.bg,
                 style: {
                     padding: '80px', // Add generous padding
                     margin: '0',
@@ -42,15 +55,18 @@ export function VerseCard({
                 // Use onClone to modify the "virtual" captured node without touching the real DOM
                 onClone: (clonedNode) => {
                     // 1. Set Background
-                    clonedNode.style.background = 'radial-gradient(circle at center, #FDFBF7, #F5F5F4)';
+                    clonedNode.style.background = theme.gradient;
                     clonedNode.style.borderRadius = '0';
 
-                    // 2. Force Text Color to Dark (Stone-900) RECURSIVELY
-                    // This ensures that even if we are in Dark Mode (white text), the download (light card) has dark text
-                    clonedNode.style.color = '#1c1917';
+                    // 2. Force Text Color RECURSIVELY
+                    clonedNode.style.color = theme.text;
                     const allElements = clonedNode.querySelectorAll('*');
                     allElements.forEach(el => {
-                        el.style.color = '#1c1917';
+                        el.style.color = theme.text;
+                        // Handle icon strokes if needed
+                        if (el.tagName === 'svg' || el.tagName === 'path' || el.tagName === 'circle') {
+                            el.style.stroke = theme.text;
+                        }
                     });
                 },
             });
@@ -71,7 +87,7 @@ export function VerseCard({
 
     return (
         <div ref={cardRef} className="relative w-full text-center bg-transparent transition-colors duration-500 p-8">
-            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 w-full flex flex-col items-center justify-center min-h-[60vh] py-12 md:py-32">
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 w-full flex flex-col items-center justify-center min-h-[40vh] py-8 md:py-12">
 
                 {/* ERROR STATE */}
                 {error && (
@@ -164,6 +180,9 @@ export function VerseCard({
                                 isFavorite={isFavorite}
                                 onToggleFavorite={onToggleFavorite}
                                 onDownloadImage={handleDownloadImage}
+                                playVerse={playVerse}
+                                isPlaying={isPlaying}
+                                isLoading={isLoading}
                             />
                         </div>
                     </>
