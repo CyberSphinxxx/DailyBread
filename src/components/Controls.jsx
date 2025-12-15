@@ -73,7 +73,7 @@ export function Controls({ verse, isFavorite, onToggleFavorite, onDownloadImage 
             <Toast message="Verse copied to clipboard" visible={showToast} />
 
             {/* Floating Island Container (Glassmorphism) */}
-            <div className="mt-12 mx-auto z-40 bg-white/40 dark:bg-stone-800/40 backdrop-blur-md shadow-lg ring-1 ring-black/5 dark:ring-white/10 border border-white/20 dark:border-stone-700/30 rounded-full px-8 py-3 flex items-center gap-8 animate-in slide-in-from-bottom-10 fade-in duration-700 w-max transition-all hover:bg-white/60 dark:hover:bg-stone-800/60">
+            <div className="mt-8 mb-8 mx-auto z-40 bg-white/40 dark:bg-stone-800/40 backdrop-blur-md shadow-lg ring-1 ring-black/5 dark:ring-white/10 border border-white/20 dark:border-stone-700/30 rounded-full px-6 py-2 md:px-8 md:py-3 flex items-center gap-6 md:gap-8 animate-in slide-in-from-bottom-10 fade-in duration-700 w-max transition-all hover:bg-white/60 dark:hover:bg-stone-800/60">
 
                 {/* HEART BUTTON */}
                 <button
