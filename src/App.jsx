@@ -5,6 +5,8 @@ import { VerseCard } from './components/VerseCard';
 import { FavoritesDrawer } from './components/FavoritesDrawer';
 import { format } from 'date-fns';
 
+import { AboutModal } from './components/AboutModal';
+
 function App() {
     const [version, setVersion] = useState('niv');
     const { verse, loading, error } = useBibleVerse(version);
@@ -21,6 +23,7 @@ function App() {
     });
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [viewingFavorite, setViewingFavorite] = useState(null);
 
     // Persistence
@@ -66,7 +69,10 @@ function App() {
     ) : false;
 
     return (
-        <Layout onOpenFavorites={() => setIsDrawerOpen(true)}>
+        <Layout
+            onOpenFavorites={() => setIsDrawerOpen(true)}
+            onOpenAbout={() => setIsAboutOpen(true)}
+        >
 
             <div className="w-full max-w-2xl animate-in slide-in-from-bottom-4 duration-700">
                 <VerseCard
@@ -89,6 +95,11 @@ function App() {
                     setViewingFavorite(fav);
                     setIsDrawerOpen(false);
                 }}
+            />
+
+            <AboutModal
+                isOpen={isAboutOpen}
+                onClose={() => setIsAboutOpen(false)}
             />
 
             {/* Viewing Favorite Overlay */}
