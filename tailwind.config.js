@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,7 +8,7 @@ export default {
     theme: {
         fontFamily: {
             sans: ['Inter', 'sans-serif'],
-            serif: ['Merriweather', 'serif'],
+            serif: ['Playfair Display', 'serif'],
         },
         animation: {
             blob: "blob 7s infinite",
@@ -29,6 +30,5 @@ export default {
             },
         },
     },
-},
-plugins: [],
+    plugins: [],
 }
