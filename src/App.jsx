@@ -30,10 +30,20 @@ function App() {
     const [currentFont, setCurrentFont] = useState(() => {
         return localStorage.getItem('daily_bread_font') || 'font-editorial';
     });
+    const [isFontTransitioning, setIsFontTransitioning] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('daily_bread_font', currentFont);
     }, [currentFont]);
+
+    const handleFontChange = (newFont) => {
+        if (newFont === currentFont) return;
+        setIsFontTransitioning(true);
+        setTimeout(() => {
+            setCurrentFont(newFont);
+            setIsFontTransitioning(false);
+        }, 300); // 300ms fade out
+    };
 
     // Theme Logic
     const [theme, setTheme] = useState(() => {
@@ -108,7 +118,7 @@ function App() {
             isDarkMode={theme === 'dark'}
             toggleTheme={toggleTheme}
             currentFont={currentFont}
-            onChangeFont={setCurrentFont}
+            onChangeFont={handleFontChange}
         >
 
             <div className="w-full animate-in slide-in-from-bottom-4 duration-700">
@@ -121,6 +131,7 @@ function App() {
                     isFavorite={isCurrentVerseFavorite}
                     onToggleFavorite={toggleFavorite}
                     currentFont={currentFont}
+                    isFontTransitioning={isFontTransitioning}
                 />
             </div>
 
