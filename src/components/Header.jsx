@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Bookmark } from 'lucide-react';
+import { BookOpen, Bookmark, Menu } from 'lucide-react';
 import { format } from 'date-fns';
 
 export function Header({ onOpenFavorites }) {
@@ -8,17 +8,26 @@ export function Header({ onOpenFavorites }) {
     return (
         <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300">
 
-            {/* Left: Logo */}
-            <div className="flex items-center gap-2 md:gap-3 group cursor-default">
-                <div className="p-1.5 md:p-2 bg-indigo-50 rounded-lg text-indigo-600 group-hover:bg-indigo-100 transition-colors">
-                    <BookOpen className="w-5 h-5 md:w-6 md:h-6" />
+            {/* Left: Logo & Nav */}
+            <div className="flex items-center gap-8">
+                <div className="flex items-center gap-2 md:gap-3 group cursor-default">
+                    <div className="p-1.5 md:p-2 bg-indigo-50 rounded-lg text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+                        <BookOpen className="w-5 h-5 md:w-6 md:h-6" />
+                    </div>
+                    <h1 className="text-lg md:text-xl font-bold text-stone-800 tracking-tight font-serif">Daily Bread</h1>
                 </div>
-                <h1 className="text-lg md:text-xl font-bold text-stone-800 tracking-tight font-serif">Daily Bread</h1>
+
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-6">
+                    <a href="#" className="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors">Today</a>
+                    <a href="#" className="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors">About</a>
+                    <a href="#" className="text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors">Donate</a>
+                </nav>
             </div>
 
-            {/* Right: Date & Favorites */}
-            <div className="flex items-center gap-4 md:gap-6">
-                <span className="hidden md:block text-[10px] md:text-xs font-bold tracking-widest text-stone-400 font-sans">
+            {/* Right: Actions & Mobile Menu */}
+            <div className="flex items-center gap-4">
+                <span className="hidden md:block text-[10px] md:text-xs font-bold tracking-widest text-stone-400 font-sans border-r border-stone-200 pr-4 mr-1">
                     {todayDate}
                 </span>
 
@@ -29,6 +38,11 @@ export function Header({ onOpenFavorites }) {
                     aria-label="Open favorites"
                 >
                     <Bookmark className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
+
+                {/* Mobile Menu Icon */}
+                <button className="md:hidden p-2 text-stone-400 hover:text-stone-600 transition-colors">
+                    <Menu className="w-5 h-5" />
                 </button>
             </div>
         </header>

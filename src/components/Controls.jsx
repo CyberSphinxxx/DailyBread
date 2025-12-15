@@ -45,33 +45,31 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
     const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReference}&version=${verse.version}`;
 
     return (
-        <div className="flex gap-4 justify-center mt-8">
+        // Floating Island Container
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-stone-200 rounded-full px-6 py-2.5 flex items-center gap-6 animate-in slide-in-from-bottom-10 fade-in duration-700">
+
             {/* HEART BUTTON */}
             <button
                 onClick={onToggleFavorite}
-                className={`group p-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md border flex items-center justify-center
-          ${isFavorite
-                        ? 'bg-red-50 text-red-400 border-red-100 hover:bg-red-100 hover:scale-105'
-                        : 'bg-stone-50 hover:bg-white text-stone-400 hover:text-red-400 border-stone-100 hover:scale-110 active:scale-95'
-                    }`}
+                className={`group flex items-center justify-center transition-all duration-300
+          ${isFavorite ? 'text-red-400 hover:scale-110' : 'text-stone-400 hover:text-red-400 hover:scale-110 active:scale-95'}`}
                 title={isFavorite ? "Remove from collection" : "Save to collection"}
                 aria-label={isFavorite ? "Remove favorite" : "Add to favorites"}
             >
                 <Heart
                     className={`w-6 h-6 transition-all duration-300 ${isFavorite ? 'fill-current' : 'stroke-current'}`}
                 />
-                {/* Simple pop animation could go here, relying on CSS transition for now */}
             </button>
+
+            {/* Divider */}
+            <div className="w-px h-4 bg-stone-300"></div>
 
             {/* LISTEN BUTTON */}
             {hasSupport && (
                 <button
                     onClick={handleListen}
-                    className={`group p-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md border flex items-center justify-center
-            ${isSpeaking
-                            ? 'bg-indigo-50 text-indigo-600 border-indigo-100 hover:bg-indigo-100'
-                            : 'bg-stone-50 hover:bg-white text-stone-400 hover:text-indigo-600 border-stone-100 hover:scale-110 active:scale-95'
-                        }`}
+                    className={`group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95
+            ${isSpeaking ? 'text-indigo-600' : 'text-stone-400 hover:text-indigo-600'}`}
                     title={isSpeaking ? "Stop" : "Listen"}
                     aria-label={isSpeaking ? "Stop reading" : "Read verse aloud"}
                 >
@@ -86,7 +84,7 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
             {/* SHARE BUTTON */}
             <button
                 onClick={handleShare}
-                className="group relative p-3 rounded-full bg-stone-50 hover:bg-white text-stone-400 hover:text-indigo-600 transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md border border-stone-100"
+                className="group relative flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 hover:text-indigo-600"
                 title="Share or Copy"
                 aria-label="Share verse"
             >
@@ -96,8 +94,8 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
                     <Share2 className="w-6 h-6" />
                 )}
 
-                {/* Tooltip for Copied state */}
-                <span className={`absolute -top-10 left-1/2 -translate-x-1/2 bg-stone-800 text-white text-[10px] font-medium py-1.5 px-3 rounded-full opacity-0 transition-opacity duration-300 pointer-events-none whitespace-nowrap ${copied ? 'opacity-100' : ''}`}>
+                {/* Tooltip */}
+                <span className={`absolute -top-12 left-1/2 -translate-x-1/2 bg-stone-800 text-white text-[10px] font-medium py-1.5 px-3 rounded-full opacity-0 transition-opacity duration-300 pointer-events-none whitespace-nowrap ${copied ? 'opacity-100' : ''}`}>
                     Copied!
                 </span>
             </button>
@@ -107,7 +105,7 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
                 href={bibleGatewayUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-3 rounded-full bg-stone-50 hover:bg-white text-stone-400 hover:text-indigo-600 transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm hover:shadow-md border border-stone-100 flex items-center justify-center"
+                className="group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 hover:text-indigo-600"
                 title="Read Full Context"
                 aria-label="Read full context on BibleGateway"
             >

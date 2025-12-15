@@ -8,10 +8,9 @@ export function Layout({ children, onOpenFavorites }) {
 
             {/* Background Ambience */}
             <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* Soft Warm Mesh Gradient */}
-                <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-orange-100/40 rounded-full blur-[120px] mix-blend-multiply animate-blob"></div>
-                <div className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-blue-50/50 rounded-full blur-[120px] mix-blend-multiply animate-blob animation-delay-2000"></div>
-                <div className="absolute bottom-[-20%] left-[20%] w-[70vw] h-[70vw] bg-indigo-50/30 rounded-full blur-[120px] mix-blend-multiply animate-blob animation-delay-4000"></div>
+                {/* Large Ambient Orbs */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-100/40 rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
+                <div className="absolute top-[20%] left-[20%] w-[600px] h-[600px] bg-amber-50/40 rounded-full blur-[100px] mix-blend-multiply animate-blob -z-10"></div>
             </div>
 
             <Header onOpenFavorites={onOpenFavorites} />

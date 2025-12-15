@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, WifiOff } from 'lucide-react';
 import { Controls } from './Controls';
 
 export function VerseCard({ verse, loading, version, onVersionChange, error, isFavorite, onToggleFavorite }) {
@@ -15,103 +15,99 @@ export function VerseCard({ verse, loading, version, onVersionChange, error, isF
     };
 
     return (
-        <div className="relative group perspective-1000">
-            {/* Paper Card */}
-            <div className="relative bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 w-full transition-all duration-500 overflow-visible hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] min-h-[400px]">
+        <div className="relative w-full text-center">
 
-                {/* Noise Texture Overlay */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply rounded-[2.5rem] overflow-hidden"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
-                </div>
+            {/* Version Selector (Kept, but styled minimally) */}
+            {!error && (
+                <div className="absolute top-0 right-0 z-20">
+                    {/* Reusing existing logic but maybe position it differently in Header? 
+                 Actually user asked to keep controls minimal. The version selector 
+                 is functionally part of the "Card" logic but visually we can just 
+                 keep it where it is or let Header handle it? 
+                 
+                 Wait, the Header has the Date and Favorites. 
+                 The Version selector was in the Card Header.
+                 Let's keep it simple: A minimal text dropdown above the verse.
+             */}
+                    <div className="relative group/select">
+                        <button
+                            onClick={() => setShowDropdown(!showDropdown)}
+                            className="flex items-center gap-1.5 text-[10px] font-bold text-stone-300 hover:text-indigo-600 uppercase tracking-widest transition-colors focus:outline-none"
+                        >
+                            <span>{version}</span>
+                            <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showDropdown ? 'rotate-180' : ''}`} />
+                        </button>
 
-                {/* Content Wrapper */}
-                <div className="flex flex-col items-center text-center relative z-10 w-full h-full">
-
-                    {/* Header Row: Date & Version Selector */}
-                    {!error && (
-                        <div className="w-full flex justify-between items-center mb-8 md:mb-10 px-2">
-                            <span className="uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold text-stone-400/90 font-sans">
-                                {today}
-                            </span>
-
-                            {/* Custom Version Selector */}
-                            <div className="relative">
-                                <div className="relative">
+                        {showDropdown && (
+                            <div className="absolute right-0 top-full mt-2 w-24 bg-white/90 backdrop-blur-xl border border-white/50 shadow-xl rounded-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                {versions.map((v) => (
                                     <button
-                                        onClick={() => setShowDropdown(!showDropdown)}
-                                        className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-stone-500 hover:text-indigo-600 uppercase tracking-wider bg-white/50 hover:bg-white px-3 py-1.5 rounded-full border border-transparent hover:border-indigo-100 transition-all duration-300 focus:outline-none"
+                                        key={v}
+                                        onClick={() => handleVersionSelect(v)}
+                                        className={`w-full text-center py-2 text-[10px] font-bold tracking-wider hover:bg-indigo-50 hover:text-indigo-600 transition-colors ${version === v ? 'text-indigo-600 bg-indigo-50/50' : 'text-stone-500'}`}
                                     >
-                                        <span>{version}</span>
-                                        <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showDropdown ? 'rotate-180' : ''}`} />
+                                        {v}
                                     </button>
-
-                                    {/* Dropdown Menu */}
-                                    {showDropdown && (
-                                        <div className="absolute right-0 top-full mt-2 w-24 bg-white/90 backdrop-blur-xl border border-white/50 shadow-xl rounded-xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
-                                            {versions.map((v) => (
-                                                <button
-                                                    key={v}
-                                                    onClick={() => handleVersionSelect(v)}
-                                                    className={`w-full text-center py-2 text-[10px] font-bold tracking-wider hover:bg-indigo-50 hover:text-indigo-600 transition-colors ${version === v ? 'text-indigo-600 bg-indigo-50/50' : 'text-stone-500'}`}
-                                                >
-                                                    {v}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Backdrop to close dropdown on outside click */}
-                                    {showDropdown && (
-                                        <div className="fixed inset-0 z-40 cursor-default" onClick={() => setShowDropdown(false)}></div>
-                                    )}
-                                </div>
+                                ))}
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Content Area */}
-                    {error ? (
-                        <div className="flex-grow flex items-center justify-center min-h-[300px] animate-in fade-in duration-700">
-                            <p className="font-serif text-lg md:text-xl text-stone-500 text-center max-w-sm leading-relaxed">
-                                The Daily Bread is being prepared.<br />Please check back later.
-                            </p>
-                        </div>
-                    ) : loading ? (
-                        <div className="w-full space-y-8 animate-pulse mt-8">
-                            <div className="space-y-4">
-                                <div className="h-4 bg-stone-200/50 rounded-full w-3/4 mx-auto"></div>
-                                <div className="h-4 bg-stone-200/50 rounded-full w-5/6 mx-auto"></div>
-                                <div className="h-4 bg-stone-200/50 rounded-full w-2/3 mx-auto"></div>
-                                <div className="h-4 bg-stone-200/50 rounded-full w-1/2 mx-auto"></div>
-                            </div>
-                            <div className="h-3 bg-indigo-50 rounded-full w-32 mx-auto mt-12"></div>
-                        </div>
-                    ) : (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 w-full flex flex-col justify-between flex-grow">
-                            <div className="flex-grow flex items-center justify-center py-8">
-                                <h2 className="font-serif text-3xl md:text-4xl leading-relaxed md:leading-relaxed text-stone-800 drop-shadow-sm select-none">
-                                    "{verse?.text}"
-                                </h2>
-                            </div>
-
-                            <div className="flex flex-col items-center gap-2 mt-8">
-                                <p className="font-sans text-base font-bold text-indigo-700 tracking-wide">
-                                    {verse?.reference}
-                                </p>
-                                <p className="font-sans text-[11px] font-semibold text-stone-400 uppercase tracking-wider">
-                                    {verse?.version}
-                                </p>
-
-                                <Controls
-                                    verse={verse}
-                                    isFavorite={isFavorite}
-                                    onToggleFavorite={onToggleFavorite}
-                                />
-                            </div>
-                        </div>
-                    )}
+                        {showDropdown && (
+                            <div className="fixed inset-0 z-40 cursor-default" onClick={() => setShowDropdown(false)}></div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {/* Content Area */}
+            {error ? (
+                <div className="flex flex-col items-center justify-center min-h-[50vh] animate-in fade-in duration-700">
+                    <p className="font-serif text-2xl md:text-3xl text-stone-400 text-center max-w-lg leading-relaxed italic">
+                        "The Daily Bread is being prepared.<br />Please check back later."
+                    </p>
+                </div>
+            ) : loading ? (
+                <div className="w-full max-w-4xl mx-auto py-20 animate-pulse flex flex-col items-center">
+                    {/* Drop Cap Shimmer */}
+                    <div className="h-20 w-16 bg-stone-200/60 rounded-lg self-start md:ml-12 mb-4"></div>
+
+                    {/* Text Lines Shimmer */}
+                    <div className="w-full space-y-4">
+                        <div className="h-6 bg-stone-200/50 rounded-md w-full"></div>
+                        <div className="h-6 bg-stone-200/50 rounded-md w-[95%]"></div>
+                        <div className="h-6 bg-stone-200/50 rounded-md w-[90%]"></div>
+                        <div className="h-6 bg-stone-200/50 rounded-md w-[80%] mx-auto"></div>
+                    </div>
+                </div>
+            ) : (
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 w-full flex flex-col items-center py-12 md:py-20">
+
+                    {/* Main Verse Text */}
+                    <h2 className="font-serif text-3xl md:text-5xl leading-relaxed md:leading-[1.6] text-stone-800 drop-shadow-sm max-w-4xl mx-auto selection:bg-indigo-100 mb-12">
+                        <span className="text-5xl md:text-7xl font-bold text-indigo-900/20 float-left mr-3 mt-[-0.2em] font-serif">
+                            {verse?.text.charAt(0)}
+                        </span>
+                        {verse?.text.slice(1)}
+                    </h2>
+
+                    {/* Separator */}
+                    <div className="w-16 h-px bg-stone-300 mb-8"></div>
+
+                    {/* Reference */}
+                    <div className="flex flex-col items-center gap-1">
+                        <p className="font-sans text-sm md:text-base font-bold text-stone-500 uppercase tracking-[0.2em]">
+                            {verse?.reference}
+                        </p>
+                    </div>
+
+                    {/* Controls - Passed Props */}
+                    <Controls
+                        verse={verse}
+                        isFavorite={isFavorite}
+                        onToggleFavorite={onToggleFavorite}
+                    />
+                </div>
+            )}
         </div>
     );
 }
