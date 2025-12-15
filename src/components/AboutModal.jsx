@@ -2,18 +2,19 @@ import React from 'react';
 import { X, BookOpen, ExternalLink, Github } from 'lucide-react';
 
 export function AboutModal({ isOpen, onClose }) {
-    if (!isOpen) return null;
+    // We remove the early return to allow animations to play (fading out)
+    // if (!isOpen) return null; 
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-500 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-stone-900/30 backdrop-blur-sm animate-in fade-in duration-300"
+                className={`absolute inset-0 bg-stone-900/30 backdrop-blur-sm transition-opacity duration-500 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
                 onClick={onClose}
             ></div>
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-md bg-white/95 dark:bg-stone-900/95 backdrop-blur-2xl rounded-3xl shadow-[0_8px_40px_rgb(0,0,0,0.12)] p-10 overflow-hidden animate-in zoom-in-95 duration-300 border border-white/50 dark:border-stone-800 ring-1 ring-stone-900/5 dark:ring-white/5">
+            <div className={`relative w-full max-w-md bg-white/95 dark:bg-stone-900/95 backdrop-blur-2xl rounded-3xl shadow-[0_8px_40px_rgb(0,0,0,0.12)] p-10 overflow-hidden border border-white/50 dark:border-stone-800 ring-1 ring-stone-900/5 dark:ring-white/5 transform transition-all duration-500 ease-out ${isOpen ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-8 opacity-0'}`}>
 
                 {/* Close Button */}
                 <button
