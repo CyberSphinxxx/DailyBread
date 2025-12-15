@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { ChevronDown } from 'lucide-react';
 import { Controls } from './Controls';
 
-export function VerseCard({ verse, loading, version, onVersionChange, error }) {
+export function VerseCard({ verse, loading, version, onVersionChange, error, isFavorite, onToggleFavorite }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const today = format(new Date(), 'EEEE, MMMM do');
 
@@ -102,7 +102,11 @@ export function VerseCard({ verse, loading, version, onVersionChange, error }) {
                                     {verse?.version}
                                 </p>
 
-                                <Controls verse={verse} />
+                                <Controls
+                                    verse={verse}
+                                    isFavorite={isFavorite}
+                                    onToggleFavorite={onToggleFavorite}
+                                />
                             </div>
                         </div>
                     )}
