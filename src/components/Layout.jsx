@@ -1,17 +1,26 @@
 import React from 'react';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
-export function Layout({ children }) {
+export function Layout({ children, onOpenFavorites }) {
     return (
-        <div className="min-h-screen relative bg-stone-50 flex flex-col items-center justify-center p-4 overflow-hidden selection:bg-orange-100 selection:text-stone-900">
-            {/* Warm Gradient Blobs */}
-            <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-orange-100/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-in fade-in duration-1000"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-50/50 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-in fade-in duration-1000 delay-300"></div>
-            <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[50%] h-[50%] bg-indigo-50/30 rounded-full blur-[120px] pointer-events-none mix-blend-multiply"></div>
+        <div className="min-h-screen flex flex-col bg-stone-50 text-stone-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 relative">
 
-            {/* Content Container */}
-            <div className="w-full max-w-lg z-10 relative">
-                {children}
+            {/* Background Ambience */}
+            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+                {/* Soft Warm Mesh Gradient */}
+                <div className="absolute top-[-20%] left-[-10%] w-[70vw] h-[70vw] bg-orange-100/40 rounded-full blur-[120px] mix-blend-multiply animate-blob"></div>
+                <div className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-blue-50/50 rounded-full blur-[120px] mix-blend-multiply animate-blob animation-delay-2000"></div>
+                <div className="absolute bottom-[-20%] left-[20%] w-[70vw] h-[70vw] bg-indigo-50/30 rounded-full blur-[120px] mix-blend-multiply animate-blob animation-delay-4000"></div>
             </div>
+
+            <Header onOpenFavorites={onOpenFavorites} />
+
+            <main className="flex-grow flex flex-col justify-center items-center px-4 py-8 relative z-10 w-full max-w-7xl mx-auto">
+                {children}
+            </main>
+
+            <Footer />
         </div>
     );
 }
