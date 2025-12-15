@@ -4,7 +4,7 @@ import { Footer } from './Footer';
 
 export function Layout({ children, onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme, currentFont, onChangeFont }) {
     return (
-        <div className="min-h-screen flex flex-col bg-[#FAFAF9] dark:bg-stone-950 text-stone-900 dark:text-stone-300 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 selection:text-indigo-900 dark:selection:text-indigo-200 relative transition-colors duration-500 box-border overflow-x-hidden">
+        <div className="h-screen flex flex-col bg-[#FAFAF9] dark:bg-stone-950 text-stone-900 dark:text-stone-300 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 selection:text-indigo-900 dark:selection:text-indigo-200 relative transition-colors duration-500 box-border overflow-hidden">
 
             {/* Background Ambience */}
             <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
@@ -25,7 +25,7 @@ export function Layout({ children, onOpenFavorites, onOpenAbout, isDarkMode, tog
                 onChangeFont={onChangeFont}
             />
 
-            <main className="flex-grow flex flex-col justify-center items-center px-4 py-8 relative z-10 w-full max-w-7xl mx-auto">
+            <main className="flex-grow flex flex-col justify-center items-center px-4 pb-48 relative z-10 w-full max-w-7xl mx-auto">
                 {children}
             </main>
 
