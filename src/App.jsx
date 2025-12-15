@@ -28,6 +28,15 @@ function App() {
         localStorage.setItem('daily_bread_favorites', JSON.stringify(favorites));
     }, [favorites]);
 
+    // Dynamic Title
+    useEffect(() => {
+        if (verse) {
+            document.title = `Daily Bread | ${verse.reference}`;
+        } else {
+            document.title = 'Daily Bread';
+        }
+    }, [verse]);
+
     const toggleFavorite = () => {
         if (!verse) return;
 
