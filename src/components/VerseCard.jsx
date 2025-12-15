@@ -84,7 +84,7 @@ export function VerseCard({ verse, loading, version, onVersionChange, error, isF
 
                     {/* Main Verse Text */}
                     <h2 className="font-serif text-3xl md:text-5xl leading-relaxed md:leading-[1.6] text-stone-800 drop-shadow-sm max-w-4xl mx-auto selection:bg-indigo-100 mb-12">
-                        <span className="text-5xl md:text-7xl font-bold text-indigo-900/20 float-left mr-3 mt-[-0.2em] font-serif">
+                        <span className="text-5xl md:text-7xl font-bold text-indigo-900/20 float-left mr-0 md:mr-1 mt-[-0.15em] font-serif">
                             {verse?.text.charAt(0)}
                         </span>
                         {verse?.text.slice(1)}
