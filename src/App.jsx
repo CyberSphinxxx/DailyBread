@@ -26,6 +26,30 @@ function App() {
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [viewingFavorite, setViewingFavorite] = useState(null);
 
+    // Theme Logic
+    const [theme, setTheme] = useState(() => {
+        try {
+            const saved = localStorage.getItem('daily_bread_theme');
+            return saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        } catch {
+            return 'light';
+        }
+    });
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        if (theme === 'dark') {
+            root.classList.add('dark');
+        } else {
+            root.classList.remove('dark');
+        }
+        localStorage.setItem('daily_bread_theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    };
+
     // Persistence
     useEffect(() => {
         localStorage.setItem('daily_bread_favorites', JSON.stringify(favorites));
@@ -72,9 +96,11 @@ function App() {
         <Layout
             onOpenFavorites={() => setIsDrawerOpen(true)}
             onOpenAbout={() => setIsAboutOpen(true)}
+            isDarkMode={theme === 'dark'}
+            toggleTheme={toggleTheme}
         >
 
-            <div className="w-full max-w-2xl animate-in slide-in-from-bottom-4 duration-700">
+            <div className="w-full animate-in slide-in-from-bottom-4 duration-700">
                 <VerseCard
                     verse={verse}
                     loading={loading}
