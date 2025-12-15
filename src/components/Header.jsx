@@ -2,7 +2,7 @@ import React from 'react';
 import { BookOpen, Bookmark, Menu } from 'lucide-react';
 import { format } from 'date-fns';
 
-export function Header({ onOpenFavorites }) {
+export function Header({ onOpenFavorites, onOpenAbout }) {
     const todayDate = format(new Date(), 'EEEE, MMM d').toUpperCase();
 
     return (
@@ -20,9 +20,12 @@ export function Header({ onOpenFavorites }) {
             <div className="flex items-center gap-6">
 
                 {/* About Link */}
-                <a href="#" className="hidden md:block text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors">
+                <button
+                    onClick={onOpenAbout}
+                    className="hidden md:block text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors"
+                >
                     About
-                </a>
+                </button>
 
                 {/* Separator */}
                 <div className="hidden md:block w-px h-4 bg-stone-300/50"></div>
