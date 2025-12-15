@@ -13,29 +13,29 @@
 
 </div>
 
-## 📖 Overview
+## Overview
 
 **Daily Bread** is a serene, premium digital devotional designed to provide a single moment of reflection each day. In an era of endless scrolling and information overload, Daily Bread embraces the philosophy of **Digital Manna**: just as manna was given for one day only, this application provides one verse for you to carry through your day.
 
 There is no "next" button. We invite you to sit with the text, meditate on it, and let it speak to you.
 
-## ✨ Key Features
+## Key Features
 
-### 📱 Progressive Web App (PWA)
+### Progressive Web App (PWA)
 Install Daily Bread on your device for a native-like experience. It works offline, loads instantly, and sits right on your home screen.
 
-### 🎨 Personalization
+### Personalization
 Make the experience yours with intuitive customization tools:
 - **Font Switching**: Choose between elegant Serif (Editorial) or clean Sans-Serif (Inter) typography.
 - **Dark Mode**: Seamlessly switch between light and dark themes, or sync with your system preferences.
 
-### ❤️ Favorites Collection
+### Favorites Collection
 When a verse resonates with you, save it to your personal **Favorites Collection**. Access your saved verses anytime, even when offline.
 
-### 🔊 Listen & Reflect
+### Listen & Reflect
 Engage with the scripture through audio. The built-in **Text-to-Speech** feature reads the verse aloud, perfect for moments of reflection on the go.
 
-### 📤 Share the Word
+### Share the Word
 Share inspiration effortlessly:
 - **Image Generation**: Create beautiful, shareable images of the daily verse.
 - **Text Sharing**: Copy the verse or share directly via your device's native sharing menu.
@@ -52,7 +52,7 @@ Daily Bread is built as a modern Single Page Application (SPA) focusing on perfo
 | **Utilities** | `date-fns`, `html-to-image` |
 | **PWA** | `vite-plugin-pwa` |
 
-## 🚀 Getting Started
+## Getting Started
 
 To run this project locally, follow these simple steps:
 
@@ -72,7 +72,7 @@ To run this project locally, follow these simple steps:
     npm run dev
     ```
 
-## 📂 Project Structure
+## Project Structure
 
 ```bash
 src/
