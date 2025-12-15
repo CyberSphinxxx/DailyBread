@@ -6,7 +6,7 @@ export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }
     const todayDate = format(new Date(), 'EEEE, MMM d').toUpperCase();
 
     return (
-        <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-white/60 dark:bg-stone-900/60 backdrop-blur-md border-b border-stone-200/50 dark:border-stone-800/50 transition-all duration-300">
+        <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-transparent transition-all duration-300">
 
             {/* Left: Logo (Serif & Bold) */}
             <div className="flex items-center gap-2 group cursor-default">
