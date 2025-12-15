@@ -11,6 +11,7 @@ export function VerseCard({
     error,
     isFavorite,
     onToggleFavorite,
+    currentFont = 'font-editorial' // Default prop
 }) {
     const cardRef = useRef(null);
 
@@ -28,6 +29,7 @@ export function VerseCard({
                 filter: filter,
                 pixelRatio: 2, // Higher quality
                 width: 1200, // Force a consistent standard width
+                backgroundColor: '#FDFBF7', // Force solid warm background to prevent transparency
                 style: {
                     padding: '80px', // Add generous padding
                     margin: '0',
@@ -38,15 +40,17 @@ export function VerseCard({
                 },
                 // Use onClone to modify the "virtual" captured node without touching the real DOM
                 onClone: (clonedNode) => {
-                    // 1. Add the Social Media Card Gradient Background
-                    clonedNode.style.background = 'radial-gradient(circle at center, #fffbeb, #ffffff, #f5f5f4)'; // amber-50 via white to stone-100 preset
-
-                    // 2. Force Text Color to Dark (Stone-800) so it pops on light bg
-                    // We need to recursively force this or target the h2 specifically
-                    clonedNode.style.color = '#292524'; // text-stone-800
-
-                    // Ensure the background is opaque
+                    // 1. Set Background
+                    clonedNode.style.background = 'radial-gradient(circle at center, #FDFBF7, #F5F5F4)';
                     clonedNode.style.borderRadius = '0';
+
+                    // 2. Force Text Color to Dark (Stone-900) RECURSIVELY
+                    // This ensures that even if we are in Dark Mode (white text), the download (light card) has dark text
+                    clonedNode.style.color = '#1c1917';
+                    const allElements = clonedNode.querySelectorAll('*');
+                    allElements.forEach(el => {
+                        el.style.color = '#1c1917';
+                    });
                 },
             });
 
@@ -104,7 +108,7 @@ export function VerseCard({
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-radial-gradient from-white/40 via-transparent to-transparent dark:from-stone-800/20 pointer-events-none blur-3xl -z-10"></div>
 
                         {/* Verse Text: Fluid Typography */}
-                        <h2 className="font-serif font-normal italic antialiased text-[clamp(1.5rem,6vw,3.5rem)] leading-tight text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-4 md:px-8 relative z-10">
+                        <h2 className={`${currentFont} font-normal italic antialiased text-[clamp(1.5rem,6vw,3.5rem)] leading-tight text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-4 md:px-8 relative z-10 transition-all duration-300`}>
                             {verse.text}
                         </h2>
 
