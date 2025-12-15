@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Trash2, BookOpen } from 'lucide-react';
+import { X, Trash2, BookOpen, Bookmark } from 'lucide-react';
 
 export function FavoritesDrawer({ isOpen, onClose, favorites, onRemoveFavorite, onSelectFavorite }) {
     return (
@@ -11,60 +11,58 @@ export function FavoritesDrawer({ isOpen, onClose, favorites, onRemoveFavorite, 
             />
 
             {/* Drawer */}
-            <div className={`fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                <div className="flex flex-col h-full bg-stone-50">
-
+            <div
+                className={`fixed inset-y-0 right-0 w-80 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/50 dark:border-stone-800 z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                    }`}
+            >
+                <div className="h-full flex flex-col">
                     {/* Header */}
-                    <div className="flex items-center justify-between p-6 border-b border-stone-200 bg-white">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-                                <BookOpen className="w-5 h-5" />
-                            </div>
-                            <h2 className="text-xl font-serif font-bold text-stone-800">Your Collection</h2>
-                        </div>
+                    <div className="p-6 border-b border-stone-200/50 dark:border-stone-800/50 flex items-center justify-between">
+                        <h2 className="text-lg font-serif font-bold text-stone-800 dark:text-stone-200">Collection</h2>
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-stone-100 rounded-full text-stone-400 hover:text-stone-600 transition-colors"
+                            className="p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-all"
                         >
                             <X className="w-5 h-5" />
                         </button>
                     </div>
 
                     {/* List */}
-                    <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
                         {favorites.length === 0 ? (
-                            <div className="text-center py-10 opacity-50">
-                                <p className="text-stone-400 text-sm">No saved verses yet.</p>
+                            <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                                <div className="w-12 h-12 bg-stone-100 dark:bg-stone-800 rounded-full flex items-center justify-center mb-4">
+                                    <Bookmark className="w-6 h-6 text-stone-300 dark:text-stone-600" />
+                                </div>
+                                <p className="text-stone-500 dark:text-stone-400 font-medium">No favorites yet</p>
+                                <p className="text-xs text-stone-400 dark:text-stone-500 mt-1">Tap the heart to save a verse</p>
                             </div>
                         ) : (
-                            favorites.map((fav) => (
+                            favorites.map((fav, index) => (
                                 <div
-                                    key={`${fav.reference}-${fav.version}-${fav.date}`} // Unique key
-                                    className="group bg-white p-4 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer relative"
+                                    key={`${fav.reference}-${index}`}
+                                    className="group p-4 rounded-xl bg-white dark:bg-stone-800/50 border border-stone-100 dark:border-stone-800 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-sm transition-all cursor-pointer relative"
                                     onClick={() => onSelectFavorite(fav)}
                                 >
-                                    <div className="mb-2 flex justify-between items-start">
-                                        <span className="text-[10px] uppercase tracking-wider font-bold text-stone-400">
-                                            {fav.date}
-                                        </span>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                onRemoveFavorite(fav);
-                                            }}
-                                            className="text-stone-300 hover:text-red-400 transition-colors p-1"
-                                            title="Remove from favorites"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                    <p className="font-serif text-stone-800 leading-relaxed line-clamp-2 mb-2">
-                                        "{fav.text}"
+                                    <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-1 block">
+                                        {fav.date}
+                                    </span>
+                                    <p className="text-stone-800 dark:text-stone-200 font-serif line-clamp-2 mb-2">
+                                        {fav.text}
                                     </p>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-xs font-bold text-indigo-600 font-sans">{fav.reference}</span>
-                                        <span className="text-[10px] font-bold text-stone-400 bg-stone-100 px-1.5 py-0.5 rounded-md">{fav.version}</span>
-                                    </div>
+                                    <span className="text-xs font-medium text-stone-500 dark:text-stone-400">
+                                        {fav.reference} ({fav.version})
+                                    </span>
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onRemoveFavorite(fav);
+                                        }}
+                                        className="absolute top-2 right-2 p-1.5 text-stone-300 dark:text-stone-600 hover:text-red-400 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
                                 </div>
                             ))
                         )}
