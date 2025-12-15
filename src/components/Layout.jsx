@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function Layout({ children, onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }) {
+export function Layout({ children, onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme, currentFont, onChangeFont }) {
     return (
         <div className="min-h-screen flex flex-col bg-[#FAFAF9] dark:bg-stone-950 text-stone-900 dark:text-stone-300 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 selection:text-indigo-900 dark:selection:text-indigo-200 relative transition-colors duration-500 box-border overflow-x-hidden">
 
@@ -21,6 +21,8 @@ export function Layout({ children, onOpenFavorites, onOpenAbout, isDarkMode, tog
                 onOpenAbout={onOpenAbout}
                 isDarkMode={isDarkMode}
                 toggleTheme={toggleTheme}
+                currentFont={currentFont}
+                onChangeFont={onChangeFont}
             />
 
             <main className="flex-grow flex flex-col justify-center items-center px-4 py-8 relative z-10 w-full max-w-7xl mx-auto">
