@@ -39,6 +39,11 @@ export function useBibleVerse(version = 'NIV') {
                 const data = await response.json();
                 const verseDetails = data.verse.details;
 
+                // Sanitize text: Remove leading/trailing quotes if present
+                if (verseDetails.text) {
+                    verseDetails.text = verseDetails.text.replace(/^["']|["']$/g, '');
+                }
+
                 // 3. Save to cache
                 setVerse(verseDetails);
                 try {
