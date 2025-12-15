@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Bookmark } from 'lucide-react'; // Added Bookmark for header icon
 import { useBibleVerse } from './hooks/useBibleVerse';
 import { Layout } from './components/Layout';
 import { VerseCard } from './components/VerseCard';
@@ -43,7 +42,7 @@ function App() {
         } else {
             const newFav = {
                 ...verse,
-                date: format(new Date(), 'MMM d, yyyy') // Capture date saved
+                date: format(new Date(), 'MMM d, yyyy')
             };
             setFavorites(prev => [newFav, ...prev]);
         }
@@ -58,34 +57,19 @@ function App() {
     ) : false;
 
     return (
-        <Layout>
-            <header className="mb-10 text-center animate-in slide-in-from-top-4 duration-700 relative">
-                <div className="flex items-center justify-center gap-3 mb-3 relative">
-                    <BookOpen className="w-8 h-8 text-indigo-600" />
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Daily Bread</h1>
+        <Layout onOpenFavorites={() => setIsDrawerOpen(true)}>
 
-                    {/* Favorites Toggle Button - Absolute positioned on desktop, relative flow on mobile? 
-              Let's put it absolutely to the right for a clean header look. */}
-                    <button
-                        onClick={() => setIsDrawerOpen(true)}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-stone-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-all"
-                        title="View Collection"
-                    >
-                        <Bookmark className="w-6 h-6" />
-                    </button>
-                </div>
-                <p className="text-gray-500 font-medium text-sm">Your daily dose of wisdom</p>
-            </header>
-
-            <VerseCard
-                verse={verse}
-                loading={loading}
-                version={version}
-                onVersionChange={setVersion}
-                error={error}
-                isFavorite={isCurrentVerseFavorite}
-                onToggleFavorite={toggleFavorite}
-            />
+            <div className="w-full max-w-2xl animate-in slide-in-from-bottom-4 duration-700">
+                <VerseCard
+                    verse={verse}
+                    loading={loading}
+                    version={version}
+                    onVersionChange={setVersion}
+                    error={error}
+                    isFavorite={isCurrentVerseFavorite}
+                    onToggleFavorite={toggleFavorite}
+                />
+            </div>
 
             <FavoritesDrawer
                 isOpen={isDrawerOpen}
@@ -98,13 +82,10 @@ function App() {
                 }}
             />
 
-            {/* Viewing Favorite Overlay (Simple Modal reusing VerseCard logic could work, 
-          but for now let's just make a dedicated simple read modal to avoid Hook complexity) */}
+            {/* Viewing Favorite Overlay */}
             {viewingFavorite && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setViewingFavorite(null)}>
                     <div className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
-                        {/* reusing VerseCard with strict props to show the favorite. 
-                 We pass no-ops for non-static props */}
                         <VerseCard
                             verse={viewingFavorite}
                             loading={false}
@@ -112,16 +93,15 @@ function App() {
                             onVersionChange={() => { }} // Read only
                             isFavorite={true}
                             onToggleFavorite={() => {
-                                // Allow removing from modal?
                                 removeFavorite(viewingFavorite);
                                 setViewingFavorite(null);
                             }}
                         />
                         <button
                             onClick={() => setViewingFavorite(null)}
-                            className="mt-4 mx-auto block text-white/80 hover:text-white text-sm font-medium"
+                            className="mt-6 mx-auto block text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
                         >
-                            Close
+                            Close View
                         </button>
                     </div>
                 </div>
