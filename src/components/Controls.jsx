@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Share2, BookOpen, Volume2, Square, Heart } from 'lucide-react';
+import { Share2, BookOpen, Volume2, Square, Heart, Download, Copy, X } from 'lucide-react';
 import { useTextToSpeech } from '../hooks/useTextToSpeech';
 
 // Toast Component
@@ -8,8 +8,8 @@ function Toast({ message, visible }) {
     if (!visible) return null;
 
     return createPortal(
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-5 fade-in duration-300">
-            <div className="bg-stone-900/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-xs font-medium shadow-xl border border-white/10 flex items-center gap-2">
+        <div className="fixed bottom-48 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-5 fade-in duration-300">
+            <div className="bg-stone-900/90 dark:bg-white/90 backdrop-blur-md text-white dark:text-stone-900 px-5 py-2.5 rounded-full text-xs font-medium shadow-xl border border-white/10 dark:border-stone-900/10 flex items-center gap-2">
                 {message}
             </div>
         </div>,
@@ -17,60 +17,69 @@ function Toast({ message, visible }) {
     );
 }
 
-export function Controls({ verse, isFavorite, onToggleFavorite }) {
+export function Controls({ verse, isFavorite, onToggleFavorite, onDownloadImage }) {
+    const [showShareMenu, setShowShareMenu] = useState(false);
     const [showToast, setShowToast] = useState(false);
-    const { speak, cancel, isSpeaking, hasSupport } = useTextToSpeech();
-
-    const handleShare = async () => {
-        const text = `"${verse.text}"\n- ${verse.reference} (${verse.version})`;
-        const shareData = {
-            title: 'Daily Bread Verse',
-            text: text,
-            url: window.location.href,
-        };
-
-        try {
-            if (navigator.share) {
-                await navigator.share(shareData);
-            } else {
-                throw new Error('Web Share API not supported');
-            }
-        } catch (err) {
-            // Fallback to clipboard
-            try {
-                await navigator.clipboard.writeText(text);
-                setShowToast(true);
-                setTimeout(() => setShowToast(false), 2000);
-            } catch (clipboardErr) {
-                console.error('Failed to copy to clipboard', clipboardErr);
-            }
-        }
-    };
+    const { speak, stop, isSpeaking, hasSupport } = useTextToSpeech();
 
     const handleListen = () => {
         if (isSpeaking) {
-            cancel();
+            stop();
         } else {
-            const textToRead = `${verse.text}. ${verse.reference}`;
-            speak(textToRead);
+            speak(`${verse.text} - ${verse.reference}`);
         }
     };
 
-    const encodedReference = encodeURIComponent(verse.reference);
-    const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReference}&version=${verse.version}`;
+    // Native Share or Copy fallback
+    const handleNativeShare = async () => {
+        const textToShare = `"${verse.text}" - ${verse.reference}`;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Daily Bread',
+                    text: textToShare,
+                    url: window.location.href,
+                });
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    handleCopyText();
+                }
+            }
+        } else {
+            handleCopyText();
+        }
+        setShowShareMenu(false);
+    };
+
+    const handleCopyText = async () => {
+        const textToShare = `"${verse.text}" - ${verse.reference}`;
+        await navigator.clipboard.writeText(textToShare);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 2000);
+        setShowShareMenu(false);
+    };
+
+    const handleDownloadClick = () => {
+        onDownloadImage();
+        setShowShareMenu(false);
+    };
+
+    // Calculate BibleGateway URL
+    const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse?.reference)}&version=${verse?.version || 'NIV'}`;
 
     return (
         <>
             <Toast message="Verse copied to clipboard" visible={showToast} />
 
             {/* Floating Island Container (Now Static/Inline) */}
-            <div className="mt-12 mx-auto z-40 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-stone-200 rounded-full px-6 py-2.5 flex items-center gap-6 animate-in slide-in-from-bottom-10 fade-in duration-700 w-max">
+            <div className="mt-12 mx-auto z-40 bg-white/90 dark:bg-stone-900/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-stone-200 dark:border-stone-800 rounded-full px-6 py-2.5 flex items-center gap-6 animate-in slide-in-from-bottom-10 fade-in duration-700 w-max">
 
                 {/* HEART BUTTON */}
                 <button
                     onClick={onToggleFavorite}
                     className={`group flex items-center justify-center transition-all duration-300
-            ${isFavorite ? 'text-red-400 hover:scale-110' : 'text-stone-400 hover:text-red-400 hover:scale-110 active:scale-95'}`}
+            ${isFavorite ? 'text-red-400 hover:scale-110' : 'text-stone-400 dark:text-stone-500 hover:text-red-400 hover:scale-110 active:scale-95'}`}
                     title={isFavorite ? "Remove from collection" : "Save to collection"}
                     aria-label={isFavorite ? "Remove favorite" : "Add to favorites"}
                 >
@@ -80,14 +89,14 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
                 </button>
 
                 {/* Divider */}
-                <div className="w-px h-4 bg-stone-300"></div>
+                <div className="w-px h-4 bg-stone-300 dark:bg-stone-700"></div>
 
                 {/* LISTEN BUTTON */}
                 {hasSupport && (
                     <button
                         onClick={handleListen}
                         className={`group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95
-              ${isSpeaking ? 'text-indigo-600' : 'text-stone-400 hover:text-indigo-600'}`}
+              ${isSpeaking ? 'text-indigo-600 dark:text-indigo-400' : 'text-stone-400 dark:text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
                         title={isSpeaking ? "Stop" : "Listen"}
                         aria-label={isSpeaking ? "Stop reading" : "Read verse aloud"}
                     >
@@ -100,21 +109,44 @@ export function Controls({ verse, isFavorite, onToggleFavorite }) {
                 )}
 
                 {/* SHARE BUTTON */}
-                <button
-                    onClick={handleShare}
-                    className="group relative flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 hover:text-indigo-600"
-                    title="Share or Copy"
-                    aria-label="Share verse"
-                >
-                    <Share2 className="w-6 h-6" />
-                </button>
+                <div className="relative">
+                    <button
+                        onClick={() => setShowShareMenu(!showShareMenu)}
+                        className="group relative flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 dark:text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                        title="Share"
+                        aria-label="Share options"
+                    >
+                        {showShareMenu ? <X className="w-6 h-6" /> : <Share2 className="w-6 h-6" />}
+                    </button>
+
+                    {/* SHARE MENU */}
+                    {showShareMenu && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 bg-white dark:bg-stone-800 rounded-xl shadow-xl border border-stone-200 dark:border-stone-700 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200 flex flex-col">
+                            <button
+                                onClick={handleCopyText}
+                                className="px-4 py-3 flex items-center gap-3 hover:bg-stone-50 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 text-sm font-medium transition-colors text-left"
+                            >
+                                <Copy className="w-4 h-4" />
+                                Copy Text
+                            </button>
+                            <div className="h-px bg-stone-100 dark:bg-stone-700"></div>
+                            <button
+                                onClick={handleDownloadClick}
+                                className="px-4 py-3 flex items-center gap-3 hover:bg-stone-50 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 text-sm font-medium transition-colors text-left"
+                            >
+                                <Download className="w-4 h-4" />
+                                Save Image
+                            </button>
+                        </div>
+                    )}
+                </div>
 
                 {/* CONTEXT BUTTON */}
                 <a
                     href={bibleGatewayUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 hover:text-indigo-600"
+                    className="group flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-stone-400 dark:text-stone-500 hover:text-indigo-600 dark:hover:text-indigo-400"
                     title="Read Full Context"
                     aria-label="Read full context on BibleGateway"
                 >
