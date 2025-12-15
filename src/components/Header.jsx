@@ -1,10 +1,11 @@
 import React from 'react';
-import { BookOpen, Bookmark, Menu, Moon, Sun } from 'lucide-react';
+import { BookOpen, Bookmark, Menu, Moon, Sun, Type } from 'lucide-react';
 import { format } from 'date-fns';
 
-export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }) {
+export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme, currentFont, onChangeFont }) {
     const todayDate = format(new Date(), 'EEEE, MMM d').toUpperCase();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isFontMenuOpen, setIsFontMenuOpen] = React.useState(false);
 
     // Lock body scroll when menu is open
     React.useEffect(() => {
@@ -29,6 +30,13 @@ export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }
         setIsMenuOpen(false);
         onOpenFavorites();
     };
+
+    const fonts = [
+        { id: 'font-editorial', name: 'Editorial', class: 'font-editorial' },
+        { id: 'font-book', name: 'Book', class: 'font-book' },
+        { id: 'font-modern', name: 'Modern', class: 'font-modern' },
+        { id: 'font-typewriter', name: 'Typewriter', class: 'font-typewriter' },
+    ];
 
     return (
         <>
@@ -61,6 +69,38 @@ export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }
                         {todayDate}
                     </span>
 
+                    {/* DESKTOP: Font Switcher */}
+                    <div className="hidden md:block relative">
+                        <button
+                            onClick={() => setIsFontMenuOpen(!isFontMenuOpen)}
+                            className={`p-2 rounded-md transition-colors ${isFontMenuOpen ? 'text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-900/20' : 'text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300'}`}
+                            title="Change Font"
+                        >
+                            <Type className="w-5 h-5" />
+                        </button>
+
+                        {isFontMenuOpen && (
+                            <>
+                                <div className="fixed inset-0 z-10" onClick={() => setIsFontMenuOpen(false)}></div>
+                                <div className="absolute right-0 top-full mt-2 w-48 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-stone-200 dark:border-stone-800 rounded-xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col p-1">
+                                    {fonts.map(font => (
+                                        <button
+                                            key={font.id}
+                                            onClick={() => {
+                                                onChangeFont(font.id);
+                                                setIsFontMenuOpen(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-2 text-sm rounded-lg transition-colors ${currentFont === font.id ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800/50'} ${font.class}`}
+                                        >
+                                            {font.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+
                     {/* DESKTOP: Theme Toggle */}
                     <button
                         onClick={toggleTheme}
@@ -87,14 +127,8 @@ export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }
                         className="md:hidden p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors z-50 relative"
                         aria-label="Toggle menu"
                     >
-                        {/* Animate between Menu and X icon potentially, or just keep it simple */}
+                        {/* Animate between Menu and X icon */}
                         <Menu className={`w-6 h-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90 opacity-0' : 'rotate-0 opacity-100'}`} />
-                        {/* Close Icon Absolute positioned for smooth swap */}
-                        {/* We will rely on the overlay's close button or just this button toggling if we want, 
-                             BUT the requirements said "Close Button inside overlay". 
-                             So we keep this as just the opener, but maybe let it morph? 
-                             Let's just keep it simple as the opener for now. 
-                          */}
                     </button>
                 </div>
             </header>
@@ -118,6 +152,22 @@ export function Header({ onOpenFavorites, onOpenAbout, isDarkMode, toggleTheme }
                 >
                     About
                 </button>
+
+                {/* Mobile Font Selection */}
+                <div className="flex flex-col items-center gap-4 py-4 w-full px-8">
+                    <p className="text-stone-500 text-xs font-bold tracking-widest uppercase">Typography</p>
+                    <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                        {fonts.map(font => (
+                            <button
+                                key={font.id}
+                                onClick={() => onChangeFont(font.id)}
+                                className={`px-4 py-2 rounded-lg text-sm border transition-all ${currentFont === font.id ? 'bg-white text-stone-900 border-white' : 'bg-transparent text-stone-400 border-stone-700 hover:border-stone-500'} ${font.class}`}
+                            >
+                                {font.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
                 <button
                     onClick={handleOpenFavorites}
