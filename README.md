@@ -2,42 +2,59 @@
 
 > *"Give us this day our daily bread."*
 
-**Daily Bread** is a serene, premium digital devotional designed to provide a single moment of reflection each day. Unlike typical Bible apps with endless scrolling, Daily Bread strictly offers **one verse per day**, encouraging deep meditation rather than consumption.
+![Daily Bread Preview](https://github.com/user-attachments/assets/46104649-4b02-4a01-b9cd-51ff52e31c2e)
 
-<img width="1836" height="949" alt="image" src="https://github.com/user-attachments/assets/46104649-4b02-4a01-b9cd-51ff52e31c2e" />
+<div align="center">
 
----
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 
-## 📖 For The Reader (Non-Programmers)
+</div>
 
-Welcome! This application was built with a specific philosophy in mind: **Digital Manna**. Just as the manna in the wilderness was given for one day only, this site provides one verse for you to carry through your day.
+## 📖 Overview
 
-### How It Works
-1.  **One Verse, 24 Hours**: The verse updates automatically every day. There is no "next" button. We invite you to sit with the text, read it aloud, or memorize it.
-2.  **Listen**: Click the **Speaker Icon** in the bottom floating bar to have the verse read aloud to you.
-3.  **Collect**: Something speak to you? Click the **Heart Icon** to save it to your personal collection. You can access your collection anytime by clicking the bookmark icon in the top right.
-4.  **Share**: Want to send today's verse to a friend? Click the **Share Icon** to copy the text or open your device's sharing menu.
-5.  **Context**: Want to read more? Click the **Book Icon** to open the full chapter on BibleGateway.
+**Daily Bread** is a serene, premium digital devotional designed to provide a single moment of reflection each day. In an era of endless scrolling and information overload, Daily Bread embraces the philosophy of **Digital Manna**: just as manna was given for one day only, this application provides one verse for you to carry through your day.
 
-### The "Preparation" Message
-If you see a message saying *"The Daily Bread is being prepared"*, it means you are offline or the daily verse is refreshing. Please check your internet connection or try again in a few minutes.
+There is no "next" button. We invite you to sit with the text, meditate on it, and let it speak to you.
 
----
+## ✨ Key Features
 
-## 🛠️ For Developers
+### 📱 Progressive Web App (PWA)
+Install Daily Bread on your device for a native-like experience. It works offline, loads instantly, and sits right on your home screen.
 
-Daily Bread is a modern Single Page Application (SPA) built with performance, accessibility, and aesthetics in mind.
+### 🎨 Personalization
+Make the experience yours with intuitive customization tools:
+- **Font Switching**: Choose between elegant Serif (Editorial) or clean Sans-Serif (Inter) typography.
+- **Dark Mode**: Seamlessly switch between light and dark themes, or sync with your system preferences.
 
-### Tech Stack
--   **Core**: React 18, Vite
--   **Styling**: Tailwind CSS (with custom animations and typography)
--   **Icons**: Lucide React
--   **Utilities**: `date-fns` for time management
--   **Sate & Storage**: LocalStorage for caching and persistence
+### ❤️ Favorites Collection
+When a verse resonates with you, save it to your personal **Favorites Collection**. Access your saved verses anytime, even when offline.
 
-### Getting Started
+### 🔊 Listen & Reflect
+Engage with the scripture through audio. The built-in **Text-to-Speech** feature reads the verse aloud, perfect for moments of reflection on the go.
 
-Prerequisites: Node.js (v16+)
+### 📤 Share the Word
+Share inspiration effortlessly:
+- **Image Generation**: Create beautiful, shareable images of the daily verse.
+- **Text Sharing**: Copy the verse or share directly via your device's native sharing menu.
+
+## 🛠️ Tech Stack
+
+Daily Bread is built as a modern Single Page Application (SPA) focusing on performance, accessibility, and aesthetics.
+
+| Category | Technology |
+|----------|------------|
+| **Core** | React 18, Vite |
+| **Styling** | Tailwind CSS, Lucide Icons |
+| **State** | React Hooks, LocalStorage |
+| **Utilities** | `date-fns`, `html-to-image` |
+| **PWA** | `vite-plugin-pwa` |
+
+## 🚀 Getting Started
+
+To run this project locally, follow these simple steps:
 
 1.  **Clone the repository**
     ```bash
@@ -55,23 +72,9 @@ Prerequisites: Node.js (v16+)
     npm run dev
     ```
 
-### Key Features (Technical)
+## 📂 Project Structure
 
-*   **Smart Caching**: To prevent hitting API rate limits, verses are cached in `localStorage` for 24 hours. The app checks cache validity before making a network request.
-*   **Offline First**: The app gracefully handles network failures with custom error UI.
-*   **Text-to-Speech (TTS)**: Uses the native `window.speechSynthesis` API for broad compatibility without external heavy libraries.
-*   **Micro-Interactions**:
-    *   Custom `selection` colors.
-    *   Dynamic document title (`useEffect`).
-    *   Portal-based Toast notifications.
-    *   Ambient background animations (`animate-blob`).
-*   **Responsive**: Fully responsive "Editorial" layout that shifts from mobile-first column to desktop spread.
-
----
-
-### Project Structure
-
-```
+```bash
 src/
 ├── components/      # UI Components (VerseCard, Controls, Layout...)
 ├── hooks/           # Custom Hooks (useBibleVerse, useTextToSpeech)
@@ -79,4 +82,9 @@ src/
 └── main.jsx         # Entry Point
 ```
 
-Created by **John Lemar Gonzales**.
+---
+
+<div align="center">
+  <p>Created by <b>John Lemar Gonzales</b></p>
+  <p><i>Designed for moments of peace.</i></p>
+</div>
