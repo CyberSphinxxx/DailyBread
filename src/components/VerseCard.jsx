@@ -66,7 +66,7 @@ export function VerseCard({
 
     return (
         <div ref={cardRef} className="relative w-full text-center bg-transparent transition-colors duration-500 p-8">
-            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 w-full flex flex-col items-center py-20 md:py-32">
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 w-full flex flex-col items-center justify-center min-h-[60vh] py-12 md:py-32">
 
                 {/* ERROR STATE */}
                 {error && (
@@ -104,7 +104,7 @@ export function VerseCard({
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-radial-gradient from-white/40 via-transparent to-transparent dark:from-stone-800/20 pointer-events-none blur-3xl -z-10"></div>
 
                         {/* Verse Text: Fluid Typography */}
-                        <h2 className="font-serif font-normal italic antialiased text-[clamp(2rem,5vw,4.5rem)] leading-tight text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-8 relative z-10">
+                        <h2 className="font-serif font-normal italic antialiased text-[clamp(1.5rem,6vw,3.5rem)] leading-tight text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-4 md:px-8 relative z-10">
                             {verse.text}
                         </h2>
 
