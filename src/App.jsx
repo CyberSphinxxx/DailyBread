@@ -26,6 +26,15 @@ function App() {
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [viewingFavorite, setViewingFavorite] = useState(null);
 
+    // Font Logic
+    const [currentFont, setCurrentFont] = useState(() => {
+        return localStorage.getItem('daily_bread_font') || 'font-editorial';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('daily_bread_font', currentFont);
+    }, [currentFont]);
+
     // Theme Logic
     const [theme, setTheme] = useState(() => {
         try {
@@ -98,6 +107,8 @@ function App() {
             onOpenAbout={() => setIsAboutOpen(true)}
             isDarkMode={theme === 'dark'}
             toggleTheme={toggleTheme}
+            currentFont={currentFont}
+            onChangeFont={setCurrentFont}
         >
 
             <div className="w-full animate-in slide-in-from-bottom-4 duration-700">
@@ -109,6 +120,7 @@ function App() {
                     error={error}
                     isFavorite={isCurrentVerseFavorite}
                     onToggleFavorite={toggleFavorite}
+                    currentFont={currentFont}
                 />
             </div>
 
@@ -142,6 +154,7 @@ function App() {
                                 removeFavorite(viewingFavorite);
                                 setViewingFavorite(null);
                             }}
+                            currentFont={currentFont}
                         />
                         <button
                             onClick={() => setViewingFavorite(null)}
