@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BookOpen } from 'lucide-react';
+import { useBibleVerse } from './hooks/useBibleVerse';
+import { Layout } from './components/Layout';
 
 function App() {
+    const { verse, loading, error } = useBibleVerse();
+
+    useEffect(() => {
+        console.log('App State:', { verse, loading, error });
+    }, [verse, loading, error]);
+
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <Layout>
             <header className="mb-8 text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                     <BookOpen className="w-8 h-8 text-indigo-600" />
-                    <h1 className="text-3xl font-bold text-gray-900">Daily Bread</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Daily Bread</h1>
                 </div>
-                <p className="text-gray-600">Your daily dose of wisdom</p>
+                <p className="text-gray-600 font-medium">Your daily dose of wisdom</p>
             </header>
 
-            <main className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 text-center">
-                <p className="text-gray-800 text-lg mb-4">
-                    "For where two or three share a common goal, I am there with them."
-                </p>
-                <p className="text-indigo-600 font-medium font-serif">- Matthew 18:20</p>
+            <main className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 p-8 text-center border border-slate-100">
+                {loading ? (
+                    <div className="space-y-4 animate-pulse">
+                        <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+                    </div>
+                ) : (
+                    <>
+                        <p className="text-gray-800 text-xl leading-relaxed mb-6 font-serif">
+                            "{verse?.text}"
+                        </p>
+                        <p className="text-indigo-600 font-semibold tracking-wide text-sm uppercase">
+                            {verse?.reference} <span className="text-gray-400 font-normal normal-case ml-1">{verse?.version}</span>
+                        </p>
+                    </>
+                )}
             </main>
-        </div>
+        </Layout>
     );
 }
 
