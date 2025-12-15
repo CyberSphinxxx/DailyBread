@@ -18,7 +18,7 @@ export function VerseCard({
         if (!cardRef.current) return;
 
         try {
-            // Filter out the controls using the class name we'll add
+            // Filter out the controls
             const filter = (node) => {
                 const exclusionClasses = ['controls-container'];
                 return !exclusionClasses.some((classname) => node.classList?.contains(classname));
@@ -27,7 +27,27 @@ export function VerseCard({
             const dataUrl = await toPng(cardRef.current, {
                 filter: filter,
                 pixelRatio: 2, // Higher quality
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#1c1917' : '#FBFBF9' // "Quote Card" background
+                width: 1200, // Force a consistent standard width
+                style: {
+                    padding: '80px', // Add generous padding
+                    margin: '0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
+                // Use onClone to modify the "virtual" captured node without touching the real DOM
+                onClone: (clonedNode) => {
+                    // 1. Add the Social Media Card Gradient Background
+                    clonedNode.style.background = 'radial-gradient(circle at center, #fffbeb, #ffffff, #f5f5f4)'; // amber-50 via white to stone-100 preset
+
+                    // 2. Force Text Color to Dark (Stone-800) so it pops on light bg
+                    // We need to recursively force this or target the h2 specifically
+                    clonedNode.style.color = '#292524'; // text-stone-800
+
+                    // Ensure the background is opaque
+                    clonedNode.style.borderRadius = '0';
+                },
             });
 
             const link = document.createElement('a');
@@ -36,7 +56,7 @@ export function VerseCard({
             link.click();
         } catch (err) {
             console.error('Failed to generate image', err);
-            alert('Could not generate image due to browser security restrictions on fonts. Please try using a different browser or checking your connection.');
+            alert('Could not generate image. Please try again.');
         }
     }, [cardRef]);
 
@@ -80,7 +100,11 @@ export function VerseCard({
                         </div>
 
                         {/* Verse Text */}
-                        <h2 className="font-serif font-normal italic antialiased text-3xl leading-normal md:text-6xl md:leading-relaxed text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-8">
+                        {/* Holy Glow Background */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-radial-gradient from-white/40 via-transparent to-transparent dark:from-stone-800/20 pointer-events-none blur-3xl -z-10"></div>
+
+                        {/* Verse Text: Fluid Typography */}
+                        <h2 className="font-serif font-normal italic antialiased text-[clamp(2rem,5vw,4.5rem)] leading-tight text-stone-700 dark:text-stone-300 max-w-md md:max-w-7xl mx-auto mb-12 px-8 relative z-10">
                             {verse.text}
                         </h2>
 
