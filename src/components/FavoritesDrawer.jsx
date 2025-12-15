@@ -6,16 +6,16 @@ export function FavoritesDrawer({ isOpen, onClose, favorites, onRemoveFavorite, 
         <>
             {/* Backdrop */}
             <div
-                className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 onClick={onClose}
             />
 
             {/* Drawer */}
             <div
-                className={`fixed inset-y-0 right-0 w-80 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/50 dark:border-stone-800 z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed inset-y-0 right-0 w-80 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xl shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-white/50 dark:border-stone-800 z-40 ${isOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
-                <div className="h-full flex flex-col">
+                <div className="h-full flex flex-col pt-24">
                     {/* Header */}
                     <div className="p-6 border-b border-stone-200/50 dark:border-stone-800/50 flex items-center justify-between">
                         <h2 className="text-lg font-serif font-bold text-stone-800 dark:text-stone-200">Collection</h2>
