@@ -154,7 +154,7 @@ function App() {
             {/* Viewing Favorite Overlay */}
             {viewingFavorite && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setViewingFavorite(null)}>
-                    <div className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
+                    <div className="w-full max-w-lg md:max-w-5xl transition-all duration-300" onClick={e => e.stopPropagation()}>
                         <VerseCard
                             verse={viewingFavorite}
                             loading={false}
